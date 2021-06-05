@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useCriptomoneda from '../hooks/useCriptomoneda';
 import useMoneda from '../hooks/useModeda';
-// import axios from 'axios';
 import { consultarAPI } from '../helpers/consultar-api';
 import Mensaje from './Mensaje';
 
@@ -24,7 +23,7 @@ const Boton = styled.input`
     }
 `;
 
-const Formulario = () => {
+const Formulario = ({setMoneda, setCriptomoneda}) => {
 
     //state del formulario de criptomonedas
     const [listacript, setListaCripto] = useState([]);
@@ -49,8 +48,6 @@ const Formulario = () => {
     useEffect(() => {
         consultarAPI()
             .then(response => setListaCripto(response))
-
-        // consultarAPI();
     }, []);
 
     //cuando el usuario hace submit
@@ -65,7 +62,8 @@ const Formulario = () => {
 
         //pasar los datos al componente principal
         setMensaje(false);
-
+        setMoneda(moneda);
+        setCriptomoneda(criptomoneda);
     }
 
     return ( 

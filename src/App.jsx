@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Formulario from './components/fromulario';
+import Formulario from './components/Formulario';
+import Cotizacion from './components/Cotizacion';
 import imagen from './cryptomonedas.png';
+import { consultarAPICompare } from './helpers/consultar-api';
+import Spinner from './components/Spinner';
 
 const Contenedor = styled.div`
   max-width: 900px;
@@ -37,6 +40,32 @@ const Heading = styled.h1`
 `;
 
 function App() {
+
+  const [moneda, setMoneda] = useState('');
+  const [criptomoneda, setCriptomoneda] = useState('');
+
+  //state del resultado 
+  const [resultado, setResultado] = useState({});
+
+  //state del spinner
+  const [cargando, setCargando] = useState(false);
+
+  useEffect(() => {
+
+    if(!moneda) return;
+
+    //consultar la api
+    consultarAPICompare(moneda, criptomoneda)
+      .then(response => setResultado(response));
+
+    setCargando(true);
+
+    setTimeout(() => {
+      setCargando(false);
+    }, 2000);
+
+  }, [moneda, criptomoneda]);
+
   return (
     <Contenedor>
       <div>
@@ -47,7 +76,19 @@ function App() {
       </div>
       <div>
         <Heading>Cotiza Criptomonedas al Instante</Heading>
-        <Formulario />
+        <Formulario 
+          setMoneda={setMoneda}
+          setCriptomoneda={setCriptomoneda}
+        />
+
+        {cargando ? 
+          <Spinner /> :
+
+          <Cotizacion 
+            resultado={resultado}
+          />
+        }
+
       </div>
     </Contenedor>
   );

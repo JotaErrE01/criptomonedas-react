@@ -7,3 +7,11 @@ export const consultarAPI = async () => {
 
     return(response.data.Data);
 }
+
+export const consultarAPICompare = async (moneda, criptomoneda) => {
+    const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`;
+
+    const response = await axios.get(url);
+
+    return(response.data.DISPLAY[criptomoneda][moneda]);
+}
